@@ -38,11 +38,11 @@
       const spinner = document.querySelector('.spinner');
 
       const buildUrl = "Build";
-      const loaderUrl = buildUrl + "/00647c3e20c1bd43e669016a6a99428b.loader.js";
+      const loaderUrl = buildUrl + "/96f28e46c76157c1673886b465914728.loader.js";
       const config = {
-        dataUrl: buildUrl + "/8aec3eceaae1a25a555df5df777adb0d.data.unityweb",
-        frameworkUrl: buildUrl + "/9b668b22d1f2024215414041d94b0c34.framework.js.unityweb",
-        codeUrl: buildUrl + "/97ee7434af175ab57ecbc8d3e1e1c3ed.wasm.unityweb",
+        dataUrl: buildUrl + "/e2cb4196c7e4de81159cc8516f24f982.data.unityweb",
+        frameworkUrl: buildUrl + "/10b52e6717579f1cb7e468a1e85a5d47.framework.js.unityweb",
+        codeUrl: buildUrl + "/302993966171485fd5d39a8b5a584905.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "do.Games",
         productName: "Space Waves",
@@ -64,9 +64,8 @@
 		  console.log("<do.G> Unity inited");
           gameInstance = unityInstance;
           loadingCover.style.display = "none";
-          resizeCanvas();
-          isSilentMode();
-          loadAds();
+		  resizeCanvas();
+		  loadAds();
 		  
         }).catch((message) => {
           alert(message);
@@ -103,7 +102,7 @@
 			}
 	  }
 
-    function isSilentMode() {
+    function setSilentMode() {
         try {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           const ctx = new AudioContext();
