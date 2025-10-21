@@ -111,12 +111,12 @@
 		  console.log("isSilentMode");
 
         oscillator.onended = function() {
-			gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', true);
+			//gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', true);
 			console.log("isSilentMode true");
         };
 
         setTimeout(function() {
-			gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', false);
+			//gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', false);
 			console.log("isSilentMode false");
         }, 200);
     }
