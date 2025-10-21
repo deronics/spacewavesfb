@@ -66,6 +66,7 @@
           loadingCover.style.display = "none";
 		  resizeCanvas();
 		  loadAds();
+		  isSilentMode();
 		  
         }).catch((message) => {
           alert(message);
@@ -101,6 +102,21 @@
 				}
 			}
 	  }
+	  function isSilentMode() {
+        var context = new (window.AudioContext || window.webkitAudioContext)();
+        var oscillator = context.createOscillator();
+        oscillator.connect(context.destination);
+        oscillator.start();
+        oscillator.stop(context.currentTime + 0.1);
+
+        oscillator.onended = function() {
+			gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', true);
+        };
+
+        setTimeout(function() {
+			gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', false);
+        }, 200);
+    }
     </script>
   </body>
 </html>
