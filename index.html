@@ -108,13 +108,16 @@
         oscillator.connect(context.destination);
         oscillator.start();
         oscillator.stop(context.currentTime + 0.1);
+		  console.log("isSilentMode");
 
         oscillator.onended = function() {
 			gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', true);
+			alert("true");
         };
 
         setTimeout(function() {
 			gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', false);
+			alert("false");
         }, 200);
     }
     </script>
