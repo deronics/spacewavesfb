@@ -38,11 +38,11 @@
       const spinner = document.querySelector('.spinner');
 
       const buildUrl = "Build";
-      const loaderUrl = buildUrl + "/14b574d249002806acb8a03eec2a2bf7.loader.js";
+      const loaderUrl = buildUrl + "/00647c3e20c1bd43e669016a6a99428b.loader.js";
       const config = {
-        dataUrl: buildUrl + "/57e7be8c2bc5e28dd0b135cef5bd0f82.data.unityweb",
+        dataUrl: buildUrl + "/8aec3eceaae1a25a555df5df777adb0d.data.unityweb",
         frameworkUrl: buildUrl + "/9b668b22d1f2024215414041d94b0c34.framework.js.unityweb",
-        codeUrl: buildUrl + "/0c96c63a68d0e02757a8073d5ff99e87.wasm.unityweb",
+        codeUrl: buildUrl + "/97ee7434af175ab57ecbc8d3e1e1c3ed.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "do.Games",
         productName: "Space Waves",
@@ -64,9 +64,9 @@
 		  console.log("<do.G> Unity inited");
           gameInstance = unityInstance;
           loadingCover.style.display = "none";
-		  resizeCanvas();
-		  isSilentMode();
-		  loadAds();
+          resizeCanvas();
+          isSilentMode();
+          loadAds();
 		  
         }).catch((message) => {
           alert(message);
@@ -102,23 +102,43 @@
 				}
 			}
 	  }
-	  function isSilentMode() {
-        var context = new (window.AudioContext || window.webkitAudioContext)();
-        var oscillator = context.createOscillator();
-        oscillator.connect(context.destination);
-        oscillator.start();
-        oscillator.stop(context.currentTime + 0.1);
-		  console.log("isSilentMode");
 
-        oscillator.onended = function() {
-			//gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', true);
-			console.log("isSilentMode true");
-        };
+    function isSilentMode() {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          const ctx = new AudioContext();
 
-        setTimeout(function() {
-			//gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', false);
-			console.log("isSilentMode false");
-        }, 200);
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          gain.gain.value = 0; // делаем тишину
+
+          osc.connect(gain).connect(ctx.destination);
+
+          let ended = false;
+
+          osc.start();
+          osc.stop(ctx.currentTime + 0.05); // короткий 50мс сигнал
+
+          osc.onended = () => {
+            ended = true;
+            // если дошли сюда, значит iOS разрешил проигрывание
+            // не silent
+            gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', "false");
+            ctx.close();
+          };
+
+          // если через 300мс onended так и не вызвался — звук не прошёл (silent mode)
+          setTimeout(() => {
+            if (!ended) {
+              // silent mode включён
+              gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', "true");
+              ctx.close();
+            }
+          }, 300);
+        } catch (e) {
+          // если браузер не поддерживает Web Audio API
+          gameInstance.SendMessage('FacebookIGSDK', 'SetSilentMode', "null");
+        }
     }
     </script>
   </body>
